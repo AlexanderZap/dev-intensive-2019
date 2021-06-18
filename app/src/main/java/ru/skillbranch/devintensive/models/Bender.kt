@@ -51,9 +51,9 @@ class Bender (var status: Status = Status.NORMAL, var question: Question = Quest
 
     enum class Status (val color: Triple<Int, Int, Int>) {
         NORMAL(Triple(255,255,255)),
-        WARNING(Triple(255,120,0)),
-        DANGER(Triple(255,60,60)),
-        CRITICAL(Triple(255,255,0));
+        WARNING(Triple(255,255,0)),
+        DANGER(Triple(255,120,0)),
+        CRITICAL(Triple(255,60,60));
 
         fun nextStatus() :Status {
             return if (this.ordinal < values().lastIndex){
