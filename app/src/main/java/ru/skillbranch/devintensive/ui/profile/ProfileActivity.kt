@@ -29,7 +29,7 @@ class ProfileActivity : AppCompatActivity() {
     lateinit var viewFields: Map<String, TextView>
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        //setTheme(R.style.)
+        //setTheme(R.style.AppThemes)
         super.onCreate(savedInstanceState)
         binding = ActivityProfileBinding.inflate(layoutInflater)
         val view = binding.root
@@ -112,7 +112,7 @@ class ProfileActivity : AppCompatActivity() {
     }
 
     private fun updateTheme(mode: Int) {
-        AppCompatDelegate.setDefaultNightMode(mode)
+        delegate.localNightMode = mode
     }
 
     private fun updateUI(profile: Profile) {

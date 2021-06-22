@@ -11,4 +11,5 @@
     <color name="color_accent_secondary">#BEAC32EE</color>
     <color name="color_divide_dark">#1F000000</color>
     <color name="color_divide_light">#1FFFFFFF</color>
+    <color name="color_indicator">#581F99</color>
 </resources>
