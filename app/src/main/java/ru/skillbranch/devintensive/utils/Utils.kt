@@ -93,5 +93,38 @@ object Utils {
         return result
     }
 
-    fun toInitials(firstName: String?, lastName: String?) = "${firstName?.get(0)}.${lastName?.get(0)}."
+    fun toInitials(firstName: String?, lastName: String?) : String? {
+        if (firstName == null && lastName == null) return null
+
+        var one: String? = ""
+        var two: String? = ""
+
+        if (firstName != null && lastName == null) {
+            if (firstName.trim().isNotEmpty()) {
+                one = firstName[0].toUpperCase().toString()
+            } else {
+                return null
+            }
+        }
+
+        if (firstName == null && lastName != null) {
+            if (lastName.trim().isNotEmpty()) {
+                two = lastName[0].toUpperCase().toString()
+            } else {
+                return null
+            }
+        }
+
+        if (firstName != null && lastName != null) {
+            if (firstName.trim().isEmpty() && lastName.trim().isEmpty()) return null
+
+            if (firstName.trim().isNotEmpty()) {
+                one = firstName[0].toUpperCase().toString()
+            }
+            if (lastName.isNotEmpty()) {
+                two = lastName[0].toUpperCase().toString()
+            }
+        }
+        return "$one$two"
+    }
 }

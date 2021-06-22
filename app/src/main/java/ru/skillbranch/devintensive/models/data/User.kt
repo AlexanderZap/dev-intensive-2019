@@ -38,15 +38,15 @@ data class User(
     }
 
     class Builder(
-        var id: String = "",
-        var firstName: String? = null,
-        var lastName: String? = null,
-        var avatar: String? = null,
-        var rating: Int = 0,
-        var respect: Int = 0,
-        var lastVisit: Date? = null,
-        var isOnline: Boolean = false,
-    ) {
+        private var id: String = "",
+        private var firstName: String? = null,
+        private var lastName: String? =  null,
+        private var avatar: String? = null,
+        private var rating: Int = 0,
+        private var respect: Int = 0,
+        private var lastVisit: Date? = null,
+        private var isOnline: Boolean = false
+    ){
         fun id(id: String) = apply { this.id = id }
 
         fun firstName(firstName: String?) = apply { this.firstName = firstName }
