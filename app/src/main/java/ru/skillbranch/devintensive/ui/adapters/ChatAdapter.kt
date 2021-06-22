@@ -1,9 +1,11 @@
 package ru.skillbranch.devintensive.ui.adapters
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.OrientationEventListener
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import ru.skillbranch.devintensive.R
 import ru.skillbranch.devintensive.databinding.ItemChatSingleBinding
@@ -25,15 +27,28 @@ class ChatAdapter(val listener: (ChatItem) -> Unit) : RecyclerView.Adapter<ChatA
     }
 
     fun updateData(data: List<ChatItem>) {
+
+        val diffCallback = object :DiffUtil.Callback(){
+            override fun getOldListSize(): Int = items.size
+
+            override fun getNewListSize(): Int = data.size
+
+            override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean = items[oldItemPosition].id == data[newItemPosition].id
+
+            override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean = items[oldItemPosition].hashCode() == data[newItemPosition].hashCode()
+        }
+
+        val diffResult = DiffUtil.calculateDiff(diffCallback)
+
         items = data
-        notifyDataSetChanged()
+        diffResult.dispatchUpdatesTo(this)
 
     }
 
     override fun getItemCount(): Int = items.size
 
     class SingleViewHolder(private val binding: ItemChatSingleBinding) :
-        RecyclerView.ViewHolder(binding.root) {
+        RecyclerView.ViewHolder(binding.root), ChatItemTouchHelperCallback.ItemTouchHolder {
 
         fun bind(item: ChatItem, listener: (ChatItem) -> Unit) {
             if (item.avatar == null) {
@@ -58,6 +73,14 @@ class ChatAdapter(val listener: (ChatItem) -> Unit) : RecyclerView.Adapter<ChatA
             itemView.setOnClickListener {
                 listener.invoke(item)
             }
+        }
+
+        override fun onItemSelected() {
+            itemView.setBackgroundColor(Color.LTGRAY)
+        }
+
+        override fun onItemCleared() {
+            itemView.setBackgroundColor(Color.WHITE)
         }
     }
 }

@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="72dp"
+    android:background="@android:color/white"
     android:padding="@dimen/spacing_normal_16">
 
     <ru.skillbranch.devintensive.ui.custom.AvatarImageView
