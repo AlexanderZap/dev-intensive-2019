@@ -1,12 +1,21 @@
 package ru.skillbranch.devintensive.ui.adapters
 
 import android.graphics.Canvas
+import android.graphics.Paint
+import android.graphics.Rect
+import android.graphics.RectF
+import android.view.View
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
+import ru.skillbranch.devintensive.R
 import ru.skillbranch.devintensive.models.data.ChatItem
 
 class ChatItemTouchHelperCallback(val adapter: ChatAdapter, val swipeListener: (ChatItem) -> Unit) :
     ItemTouchHelper.Callback() {
+
+    private val bgRect = RectF()
+    private val iconBounds = Rect()
+    private val bgPaint = Paint(Paint.ANTI_ALIAS_FLAG)
 
     override fun getMovementFlags(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder): Int {
         return if (viewHolder is ItemTouchHolder) {
@@ -41,16 +50,52 @@ class ChatItemTouchHelperCallback(val adapter: ChatAdapter, val swipeListener: (
     }
 
     override fun onChildDraw(
-        c: Canvas,
+        canvas: Canvas,
         recyclerView: RecyclerView,
         viewHolder: RecyclerView.ViewHolder,
         dX: Float,
         dY: Float,
         actionState: Int,
-        isCurrentlyActive: Boolean
+        isCurrentlyActive: Boolean,
     ) {
-        
-        super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
+        if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE) {
+            val itemView = viewHolder.itemView
+            drawBackground(canvas, itemView, dX)
+            drawIcon(canvas, itemView, dX)
+        }
+        super.onChildDraw(canvas, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
+    }
+
+    private fun drawBackground(canvas: Canvas, itemView: View, dx: Float) {
+        with(bgRect) {
+            left = itemView.left.toFloat()
+            right = itemView.right.toFloat()
+            top = itemView.top.toFloat()
+            bottom = itemView.bottom.toFloat()
+        }
+
+        with(bgPaint) {
+            color = itemView.resources.getColor(R.color.color_primary_dark, itemView.context.theme)
+        }
+
+        canvas.drawRect(bgRect, bgPaint)
+    }
+
+    private fun drawIcon(canvas: Canvas, itemView: View, dx: Float) {
+        val icon = itemView.resources.getDrawable(R.drawable.ic_archive, itemView.context.theme)
+        val iconSize = itemView.resources.getDimensionPixelSize(R.dimen.icon_size)
+        val space = itemView.resources.getDimensionPixelSize(R.dimen.spacing_normal_16)
+
+        val margin = (itemView.bottom - itemView.top - iconSize) / 2
+        with(iconBounds){
+            left = itemView.right + dx.toInt() + space
+            top = itemView.top + margin
+            right = itemView.right + dx.toInt() +iconSize + space
+            bottom = itemView.bottom - margin
+        }
+
+        icon.bounds = iconBounds
+        icon.draw(canvas)
     }
 
     interface ItemTouchHolder {
